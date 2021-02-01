@@ -1,4 +1,4 @@
-import { signInAction } from "./actions";
+import { signInAction, signOutAction } from "./actions";
 import { push } from "connected-react-router";
 import { db, auth, FirebaseTimestamp } from "../../firebase/index";
 
@@ -22,11 +22,29 @@ export const listenAuthState = () => {
         })
 
       } else {
-        dispatch("/signin");
+        dispatch(push("/signin"));
       }
     })
   }
 };
+
+export const resetPassword = (email) => {
+  return async (dispatch) => {
+    if (email === "") {
+      alert("必須項目が未入力です")
+      return false;
+    } else {
+      auth.sendPasswordResetEmail(email)
+        .then(() => {
+          alert("入力されたアドレスにパスワードリセット用のメールをお送りしました");
+          dispatch(push("/signin"));
+        }).catch(() => {
+          alert("パスワードリセットに失敗しました。通信環境を確認してください。");
+        });
+    }
+  }
+}
+
 export const signIn = (email, password) => {
   return async (dispatch) => {
     // Validation
@@ -96,4 +114,14 @@ export const signUp = (username, email, password, confirmPassword) => {
         }
       });
   };
+}
+
+export const signOut = () => {
+  return async (dispatch) => {
+    auth.signOut()
+      .then(() => {
+        dispatch(signOutAction());
+        dispatch(push("/signin"));
+    })
+  }
 }
