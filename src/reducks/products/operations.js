@@ -1,8 +1,19 @@
 import { db, FirebaseTimestamp } from "../../firebase";
 import { push } from "connected-react-router";
-import { fetchProductsAction } from "./actions";
+import { deleteProductAction, fetchProductsAction } from "./actions";
 
 const productsRef = db.collection("products");
+
+export const deleteProduct = (id) => {
+  return async (dispatch, getState) => {
+    productsRef.doc(id).delete()
+      .then(() => {
+        const prevProducts = getState().products.list;
+        const nextProducts = prevProducts.filter(product => product.id !== id);
+        dispatch(deleteProductAction(nextProducts));
+      });
+  }
+}
 
 export const fetchProducts = () => {
   return async (dispatch) => {
@@ -38,6 +49,7 @@ export const saveProduct = (id, name, description, category, gender, price, imag
       data.created_at = timestamp;
       id = ref.id;
       data.id = id;
+      data.created_at = timestamp;
     }
 
     return productsRef.doc(id).set(data, { merge: true })

@@ -18,7 +18,13 @@ const ProductList = () => {
       <div className="p-grid__row">
         {products.length > 0 && (
           products.map(product => (
-            <ProductCard key={product.id} />
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              images={product.images}
+              price={product.price}
+            />
           ))
         )}
       </div>
