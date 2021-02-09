@@ -20,6 +20,7 @@ const SelectBox = (props) => {
     <FormControl className={classes.formControle}>
       <InputLabel>{props.label}</InputLabel>
       <Select
+        value={props.value}
         required={props.required}
         onChange={(event) => props.select(event.target.value)}
       >
