@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import { makeStyles } from "@material-ui/styles";
 import { storage } from "../../firebase";
-import ImagePreview from "./imagePreview";
+import ImagePreview from "./ImagePreview";
 
 const useStyles = makeStyles({
   icon: {
