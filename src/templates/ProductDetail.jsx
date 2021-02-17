@@ -1,9 +1,10 @@
 import { makeStyles } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { db } from "../firebase";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { db, FirebaseTimestamp } from "../firebase";
 import HTMLReactParser from "html-react-parser";
 import { ImageSwiper, SizeTable } from "../components/Products";
+import { addProductToCart } from "../reducks/users/operations";
 
 const useStyles = makeStyles((theme) => ({
   sliderBox: {
@@ -48,6 +49,7 @@ const ProductDetail = () => {
   const classes = useStyles();
 
   const selector = useSelector(state => state);
+  const dispatch = useDispatch();
   const path = selector.router.location.pathname;
   const id = path.split("/product/")[1];
 
@@ -61,6 +63,21 @@ const ProductDetail = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const addProduct = useCallback((selectedSize) => {
+    const timestamp = FirebaseTimestamp.now();
+    dispatch(addProductToCart({
+      added_at: timestamp,
+      description: product.description,
+      gender: product.gender,
+      images: product.images,
+      name: product.name,
+      price: product.price,
+      productId: product.id,
+      quantity: 1,
+      size: selectedSize
+    }));
+  }, [product]);
+
   return (
     <section className="c-sectio-wrapin">
       {product && (
@@ -72,7 +89,7 @@ const ProductDetail = () => {
             <h2 className="u-text__headline">{product.name}</h2>
             <p className={classes.price}>{product.price.toLocaleString()}</p>
             <div className="module-spacer--small" />
-            <SizeTable sizes={product.sizes} />
+            <SizeTable addProduct={addProduct} sizes={product.sizes} />
             <div className="module-spacer--small" />
             <p>{returnCodeToBr(product.description)}</p>
           </div>
