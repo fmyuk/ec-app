@@ -21,33 +21,31 @@ const CartList = () => {
   const productsInCart = getProductsInCart(selector);
 
   const goToOrder = useCallback(() => {
-    dispatch(push("/order/confirm"));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(push('/order/confirm'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const backToHome = useCallback(() => {
-    dispatch(push("/"));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const backToTop = useCallback(() => {
+    dispatch(push('/'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <section className="c-section-wrapin">
-      <h2 className="u-text__headline">
-        ショッピングカート
-      </h2>
+      <h2 className="u-text__headline">ショッピングカート</h2>
       <List className={classes.root}>
         {productsInCart.length > 0 && (
-          productsInCart.map(product => <CartListItem key={product.cartId} product={product} />)
+          productsInCart.map(product => <CartListItem product={product} key={product.cartId} />)
         )}
       </List>
-      <div className="module-spacer-medium" />
+      <div className="module-spacer--medium" />
       <div className="p-grid__column">
         <PrimaryButton label={"レジへ進む"} onClick={goToOrder} />
         <div className="module-spacer--extra-extra-small" />
-        <GreyButton label={"ショッピングを続ける"} onClick={backToHome} />
+        <GreyButton label={"ショッピングを続ける"} onClick={backToTop} />
       </div>
     </section>
-  )
-}
+  );
+};
 
 export default CartList;

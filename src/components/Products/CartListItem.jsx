@@ -28,39 +28,30 @@ const useStyles = makeStyles({
 const CartListItem = (props) => {
   const classes = useStyles();
   const selector = useSelector(state => state);
-  const uid = getUserId(selector);
 
   const image = props.product.images[0].path;
-  const name = props.product.name;
   const price = props.product.price.toLocaleString();
-  const size = props.product.size;
 
   const removeProductFromCart = (id) => {
-    return db.collection("users").doc(uid)
-      .collection("cart").doc(id)
-      .delete();
+    const uid = getUserId(selector);
+    return db.collection('users').doc(uid).collection('cart').doc(id).delete()
   };
 
   return (
     <>
       <ListItem className={classes.list}>
         <ListItemAvatar>
-          <img className={classes.image} src={image} alt="商品画像" />
+          <img className={classes.image} src={image} alt="商品のTOP画像" />
         </ListItemAvatar>
         <div className={classes.text}>
-          <ListItemText
-            primary={name}
-            secondary={"サイズ：" + size}
-          />
-          <ListItemText
-            primary={"¥" + price}
-          />
+          <ListItemText primary={props.product.name} secondary={"サイズ：" + props.product.size} />
+          <ListItemText primary={"¥" + price} />
         </div>
-        <IconButton onClick={() => removeProductFromCart(props.product.cartId)}>
+        <IconButton onClick={() => removeProductFromCart(props.product.cartId)} >
           <DeleteIcon />
         </IconButton>
-        <Divider />
       </ListItem>
+      <Divider />
     </>
   );
 };
