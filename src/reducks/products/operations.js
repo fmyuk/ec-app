@@ -91,7 +91,7 @@ export const orderProduct = (productsInCart, amount) => {
             shipping_date: shippingDate,
             updated_at: timestamp
           };
-
+          
           batch.set(orderRef, history, {merge: true});
           dispatch(push("/order/complete"));
       }).catch(() => {
